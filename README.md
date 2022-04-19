@@ -44,3 +44,5 @@ $ pwd
 $ export FLASK_APP="application.py"
 $ flask run
 ```
+
+Currently, the code supports uploading a model through the react website and save it to mongodb through the flash api.
