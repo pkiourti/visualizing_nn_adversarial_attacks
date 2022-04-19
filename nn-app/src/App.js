@@ -10,6 +10,7 @@ export default class NNApp extends Component {
         this.upload = this.upload.bind(this)
 
         this.state = {
+            base_url: 'https://a4bb-24-63-24-208.ngrok.io',
             show_upload_page: true,
             file: '',
         }
@@ -28,7 +29,7 @@ export default class NNApp extends Component {
         const formData = new FormData();
         formData.append('model_file', this.state.file);
         formData.append('name', this.state.name);
-        fetch('https://a4bb-24-63-24-208.ngrok.io/models',
+        fetch(this.state.base_url + '/models',
 			{
 				method: 'POST',
 				body: formData,
