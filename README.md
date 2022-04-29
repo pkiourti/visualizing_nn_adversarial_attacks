@@ -3,8 +3,8 @@
 ## Setup
 ### Install dependencies from requirements.txt
 ```
-conda create -n project2 python
-conda activate project2
+conda create -n final python
+conda activate final
 conda install --file requirements.txt 
 ```
 
