@@ -60,7 +60,9 @@ class ModelList(Resource):
 
     def post(self):
         model_file = request.files['model_file']
+        print(type(model_file))
         name = secure_filename(model_file.filename)
+        print(type(name))
         model_file.save(name)
         json_data = {}
         json_data['path'] = name
