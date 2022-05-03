@@ -50,6 +50,7 @@ class Model:
         path = json_data['path']
         model = CIFAR10()
         model.load_state_dict(torch.load(path, map_location=torch.device('cpu')))
+        print(model)
         
         model_type_id = 0
         created_at = datetime.utcnow()

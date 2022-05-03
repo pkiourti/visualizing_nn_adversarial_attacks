@@ -1,5 +1,6 @@
 import json
 from flask import Flask, request
+from flask_cors import CORS
 from werkzeug.utils import secure_filename
 from flask_restful import Resource, Api, abort
 import torch
@@ -7,18 +8,21 @@ from cifar10 import CIFAR10
 import os
 
 import sys
-sys.path.extend(['./model_module'])
+sys.path.extend(['./model_module', './user_module'])
 
 from model import Model
+from users import User
 
 UPLOAD_FOLDER = './'
-ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', '.pt'])
+ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif', '.pt'])
 application = Flask(__name__)
+CORS(application)
 application.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 api = Api(application)
 
 model_module = Model()
+user_module = User()
 
 def error(e, **kwargs):
     if e.args[0] == 0:
@@ -72,9 +76,29 @@ class ModelList(Resource):
         except ValueError as e:
             error(e, model_id=model_id, model_type_id=model_type_id)
         return {"model_id": model_id}
-        #return 1
+
+class UsersList(Resource):
+    def get(self):
+        return user_module.get_users()
+
+    def post(self):
+        print()
+        print(request)
+        print()
+        json_data = {}
+        json_data['name'] = request.json['name']
+        json_data['email'] = request.json['email']
+        json_data = json.dumps(json_data)
+        try:
+            user_id = user_module.register(json_data)
+        except ValueError as e:
+            error(e)
+        return {"user_id": user_id}
 
 api.add_resource(ModelList, '/models')
+api.add_resource(UsersList, '/users')
+
+#@application.route('/models/user_id')
 
 @application.route('/')
 def index():
