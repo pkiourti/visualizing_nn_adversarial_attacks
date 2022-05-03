@@ -7,10 +7,11 @@
     "@testing-library/react": "^13.1.1",
     "@testing-library/user-event": "^13.5.0",
     "bootstrap": "^5.1.3",
-    "react": "^17.0.0",
+    "react": "^0.0.0-experimental-ce1386028-20220428",
     "react-bootstrap": "^2.2.3",
     "react-devtools": "^4.24.4",
-    "react-dom": "^17.0.0",
+    "react-dom": "^0.0.0-experimental-ce1386028-20220428",
+    "react-google-login": "^5.2.2",
     "react-scripts": "^2.1.3",
     "web-vitals": "^2.1.4"
   },

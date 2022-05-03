@@ -1,0 +1,20 @@
+import React from 'react';
+import { GoogleLogin } from 'react-google-login';
+
+const clientId = '653109775968-k5i1a3nt7hkus64lu10r61br12t8lvfi.apps.googleusercontent.com'
+
+const UserLogin = (props) => {
+    return (
+        <div style={{marginTop: '20%', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+            <GoogleLogin
+                clientId={clientId}
+                buttonText="Login"
+                onSuccess={props.onSuccess}
+                onFailure={props.onFailure}
+                cookiePolicy={'single_host_origin'}
+            />
+        </div>
+    )
+}
+
+export default UserLogin;
