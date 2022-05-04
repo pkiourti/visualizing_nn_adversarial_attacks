@@ -27,6 +27,8 @@ user_module = User()
 def error(e, **kwargs):
     if e.args[0] == 0:
         abort(404, message="Model is {} doesn't exist".format(kwargs['model_id']))
+    if e.args[0] == 1:
+        abort(404, message="User email {} doesn't exist".format(kwargs['email']))
 
 class Model(Resource):
     def get(self, model_id):
@@ -59,17 +61,24 @@ class Model(Resource):
         return response
            
 class ModelList(Resource):
-    def get(self):
-        return model_module.get_models()
-
     def post(self):
         model_file = request.files['model_file']
+        name = request.form['name']
+        user_id = request.form['user_id']
         print(type(model_file))
-        name = secure_filename(model_file.filename)
-        print(type(name))
-        model_file.save(name)
+        print()
+        print()
+        print(name)
+        print()
+        print()
+        print(request.files)
+        fname = secure_filename(model_file.filename)
+        print(type(fname))
+        model_file.save(fname)
         json_data = {}
-        json_data['path'] = name
+        json_data['path'] = fname
+        json_data['name'] = name
+        json_data['user_id'] = user_id
         json_data = json.dumps(json_data)
         try:
             model_id = model_module.create(json_data)
@@ -78,9 +87,6 @@ class ModelList(Resource):
         return {"model_id": model_id}
 
 class UsersList(Resource):
-    def get(self):
-        return user_module.get_users()
-
     def post(self):
         print()
         print(request)
@@ -98,7 +104,30 @@ class UsersList(Resource):
 api.add_resource(ModelList, '/models')
 api.add_resource(UsersList, '/users')
 
-#@application.route('/models/user_id')
+@application.route('/models', methods=["GET"])
+def get_user_models():
+    user_id = request.args.get('user_id', type=str)
+    json_data = {}
+    json_data['user_id'] = user_id
+    json_data = json.dumps(json_data)
+    try:
+        models = model_module.user_models(json_data)
+    except ValueError as e:
+        error(e)
+    return {"models": models}
+
+@application.route('/users', methods=["GET"])
+def get_user_by_email():
+    email = request.args.get('email', type=str)
+    json_data = {}
+    json_data['email'] = email
+    json_data = json.dumps(json_data)
+    try:
+        user_id = user_module.get_user(json_data)
+    except ValueError as e:
+        error(e, email=email)
+        return {"error": "User email " + email + " not registered"}
+    return {"user_id": user_id}
 
 @application.route('/')
 def index():

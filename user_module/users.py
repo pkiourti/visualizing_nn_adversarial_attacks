@@ -34,3 +34,19 @@ class User:
         if response.acknowledged:
             self.logger.info('Created user with user id %s', str(response.inserted_id))
             return str(response.inserted_id)
+
+    def get_user(self, json_data):
+        self.logger.info('Get user from email')
+
+        self._check_json(json_data)
+        json_data = json.loads(json_data)
+
+        email = json_data['email']
+
+        response = self.db.users.find_one({"email": email})
+        print('get user from email', response)
+        if response:
+            self.logger.info('Found user with user id %s', str(response['_id']))
+            return str(response['_id'])
+        else:
+            raise ValueError('User not found')
