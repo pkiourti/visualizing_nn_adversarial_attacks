@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Button } from 'react-bootstrap';
-import { NavBar, UserRegister, UserLogin } from './components';
+import { Table, NavBar, UserRegister, UserLogin } from './components';
 /*import { Alert } from 'react-alert';*/
 
 export default class NNApp extends Component {
@@ -17,16 +17,22 @@ export default class NNApp extends Component {
         this.onRegister = this.onRegister.bind(this)
         this.onLogin = this.onLogin.bind(this)
 
+        this.fetch_user = this.fetch_user.bind(this)
+        this.fetch_user_models = this.fetch_user_models.bind(this)
+
+        this.rowKeyGetter = this.rowKeyGetter.bind(this)
+
         this.onSuccess = this.onSuccess.bind(this)
         this.onFailure = this.onFailure.bind(this)
 
         this.state = {
-            base_url: 'https://b34e-2601-19b-a00-1760-e2d4-ead6-4f24-7131.ngrok.io',
+            base_url: 'https://c301-2601-19b-a00-1760-bb7a-e2df-4834-63e0.ngrok.io',
             show_login_page: true,
             show_register_page: false,
             show_upload_page: false,
             show_test_page: false,
             show_options_page: false,
+            user_id: '',
             file: '',
             email: '',
             name: '',
@@ -40,17 +46,14 @@ export default class NNApp extends Component {
     }
 
     onFileNameChange(name) {
-        console.log(name)
         this.setState({ filename: name })
     }
 
     onNameChange(e) {
-        console.log(e.target.value)
         this.setState({ name: e.target.value })
     }
 
     onEmailChange(e) {
-        console.log(e)
         this.setState({ email: e.target.value})
     }
 
@@ -68,15 +71,62 @@ export default class NNApp extends Component {
             })
         }).then(response => response.json().then(data => {
             console.log(data)
-            this.setState({show_options_page: true, show_register_page:false})
+            this.setState({user_id: data['user_id'], show_options_page: true, show_register_page:false})
         }).catch(error => { console.log('Error parsing data', error)})
         ).catch(error => {
             console.log(error); /*TODO: use alert or something here*/
         })
     }
 
+    fetch_user() {
+        fetch(this.state.base_url + '/users?email=' + this.state.email, {
+            method: 'GET',
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json, text/plain, */*",
+            }
+        }).then(response => response.json().then(data => {
+            this.fetch_user_models(data['user_id'])
+        }).catch(error => {console.log('Error', error)})
+        ).catch(error => {console.log('Error', error)})
+    }
+
+    fetch_user_models(user_id) {
+        fetch(this.state.base_url + '/models?user_id='+user_id, {
+            method: 'GET',
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json, text/plain, */*",
+            },
+        }).then(response => response.json().then(data => {
+            console.log(data)
+            console.log(data['models'])
+            console.log(typeof(data['models']))
+            let columns = [
+              { key: 'id', name: 'ID' },
+              { key: 'name', name: 'Model Name' },
+              { key: 'model_type_id', name: 'Model Type' },
+              { key: 'created_at', name: 'Created At' },
+            ];
+            columns = [
+              { field: 'id', title: 'ID' },
+              { field: 'name', title: 'Model Name' },
+              { field: 'model_type_id', title: 'Model Type' },
+              { field: 'created_at', title: 'Created At' },
+            ];
+            this.setState({
+                user_id: user_id, 
+                show_options_page:true, 
+                show_login_page:false,
+                rows: data['models'],
+                columns: columns})
+        }).catch(error => console.log(error))
+        ).catch(error => console.log(error))
+    }
+
     onLogin() {
-        this.setState({show_test_page: true, show_login_page:false})
+        console.log('logging in the user')
+        this.fetch_user()
     }
 
     onSuccess(response) {
@@ -117,6 +167,7 @@ export default class NNApp extends Component {
         const formData = new FormData();
         formData.append('model_file', this.state.file);
         formData.append('name', this.state.name);
+        formData.append('user_id', this.state.user_id);
         fetch(this.state.base_url + '/models',
 			{
 				method: 'POST',
@@ -139,6 +190,10 @@ export default class NNApp extends Component {
 				console.error('Error:', error);
 			});
         /*this.setState({show_upload_page: false, show_test_page: true})*/
+    }
+
+    rowKeyGetter(row) {
+        return row.id
     }
 
     render() {
@@ -199,21 +254,13 @@ export default class NNApp extends Component {
                     <div className="card" style={{'display': this.state.show_test_page ? 'block' : 'none'}}>
                       <div className="card-body">
                         <div className="container" 
-                            style={{flex:1, alignItems: 'center', justifyContent: 'center', display: 'flex', flexDirection: 'column', textAlign:'center'}}>
+                            style={{textAlign:'center'}}>
                             <h3>Visualing Adversarial Attacks</h3>
-                            <div className="row" style={{padding: "10% 0"}}>
-                            <div className="input-group mb-3">
-                              <div className="input-group-prepend">
-                                <label className="input-group-text" for="inputGroupSelect01">Options</label>
-                              </div>
-                              <select className="custom-select" id="inputGroupSelect01">
-                                <option selected>Choose...</option>
-                                <option value="1">One</option>
-                                <option value="2">Two</option>
-                                <option value="3">Three</option>
-                              </select>
-                            </div>
-                            </div>
+                            <Table 
+                                rows={this.state.rows}
+                                columns={this.state.columns}
+                                rowKeyGetter={this.rowKeyGetter}
+                            />
                         </div>
                       </div>
                     </div>

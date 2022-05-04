@@ -12,7 +12,7 @@ const UserLogin = (props) => {
                     <input type="email" name="email" className="form-control" id="model-file" onChange={props.onEmailChange}/>
                     <small id="emailHelp" className="form-text text-muted">Your email is used to associate your profile with your models</small>
                   </div>
-                <Button type="button" className="btn btn-primary" style={{margin: 20}} onClick={props.login}>See your page</Button>
+                <Button type="button" className="btn btn-primary" style={{margin: 20}} onClick={props.onLogin}>See your page</Button>
                 </form>
                 <p> or </p>
                 <div style={{margin: 20, background: "none!important",  border: "none", padding: "0!important", color: "#069", textDecoration: "underline", cursor: "pointer"}} onClick={props.goToRegister}>Register</div>
