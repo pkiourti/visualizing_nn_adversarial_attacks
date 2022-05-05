@@ -1,5 +1,6 @@
 from pymongo import MongoClient
 from datetime import datetime
+from PIL import Image
 import logging
 import json
 import os
@@ -10,11 +11,10 @@ from werkzeug.utils import secure_filename
 import torch
 from cifar10 import CIFAR10
 
-class Model:
-
+class Image:
     def __init__(self):
         logging.basicConfig()
-        self.logger = logging.getLogger('Model Logger')
+        self.logger = logging.getLogger('Image Logger')
         self.logger.setLevel(logging.DEBUG)
         client = MongoClient('localhost', 27017)
         self.db = client.models
@@ -34,12 +34,12 @@ class Model:
                              + str(type(data)))
 
     def create(self, json_data):
-        self.logger.info('Creating a new model')
+        self.logger.info('Creating a new image')
 
         self._check_json(json_data)
         json_data = json.loads(json_data)
         
-        required_data = ['path', 'name', 'user_id']
+        required_data = ['path', 'name', 'benchmark', 'class']
         required_exist = [elem in json_data.keys() for elem in required_data]
         if not all(required_exist):
             missing_data = list(set(required_data) \
@@ -49,38 +49,33 @@ class Model:
 
         path = json_data['path']
         name = json_data['name']
-        user_id = json_data['user_id']
+        label = json_data['class']
         benchmark = json_data['benchmark']
-        model = CIFAR10()
-        model.load_state_dict(torch.load(path, map_location=torch.device('cpu')))
-        print(model)
-        
-        model_type_id = 0
         created_at = datetime.utcnow()
 
-        model = {
-            "model": pickle.dumps(model),
-            "name": name,
-            "model_type_id": model_type_id,
-            "user_id": user_id,
+        im = Image.open(path)
+
+        image = {
+            "image": pickle.dumps(im),
+            "class": label,
             "benchmark": benchmark,
             "created_at": created_at
         }
-        response = self.db.models.insert_one(model)
+        response = self.db.images.insert_one(image)
         print(response)
         if response.acknowledged:
-            self.logger.info('Stored model with model id %s',str(response.inserted_id))
+            self.logger.info('Stored image with image id %s',str(response.inserted_id))
             print(response.inserted_id)
             return str(response.inserted_id)
         #TODO: delete local file
 
-    def user_models(self, json_data):
-        self.logger.info('Get user models')
+    def get_class_images(self, json_data):
+        self.logger.info('Get class images')
 
         self._check_json(json_data)
         json_data = json.loads(json_data)
         
-        required_data = ['user_id']
+        required_data = ['benchmark', 'class']
         required_exist = [elem in json_data.keys() for elem in required_data]
         if not all(required_exist):
             missing_data = list(set(required_data) \
@@ -88,18 +83,44 @@ class Model:
             self.logger.error("Missing required data %s", missing_data)
             raise ValueError(11, "Missing required data %s", missing_data)
 
-        user_id = json_data['user_id']
+        benchmark = json_data['benchmark']
+        label = json_data['class']
         
-        response = self.db.models.find({"user_id": user_id})
-        #print(response)
-        results = []
-        for model in response:
-            del model['model']
-            model['id'] = str(model['_id'])
-            del model['_id']
-            print('model', model)
-            print()
-            results.append(model)
+        response = self.db.images.find({"benchmark": benchmark, "class": label})
+        images = []
+        for im in response:
+            im['id'] = str(im['_id'])
+            del im['_id']
+            images.append(im)
 
-        print(results)
-        return results
+        return images
+
+    def get_benchmark_images(self, json_data):
+        self.logger.info('Get benchmark images')
+
+        self._check_json(json_data)
+        json_data = json.loads(json_data)
+        
+        required_data = ['benchmark']
+        required_exist = [elem in json_data.keys() for elem in required_data]
+        if not all(required_exist):
+            missing_data = list(set(required_data) \
+                    - set(compress(required_data, required_exist)))
+            self.logger.error("Missing required data %s", missing_data)
+            raise ValueError(11, "Missing required data %s", missing_data)
+
+        benchmark = json_data['benchmark']
+        
+        response = self.db.images.find({"benchmark": benchmark})
+        images = []
+        classes = []
+        for im in response:
+            if im['class'] in classes:
+                continue
+            else:
+                im['id'] = str(im['_id'])
+                del im['_id']
+                images.append(im)
+                classes.append(im['class'])
+
+        return images

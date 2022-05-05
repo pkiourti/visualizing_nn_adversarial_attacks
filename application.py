@@ -1,17 +1,23 @@
 import json
-from flask import Flask, request
+from flask import Flask, request, Response
 from flask_cors import CORS
+from requests_toolbelt import MultipartEncoder
 from werkzeug.utils import secure_filename
 from flask_restful import Resource, Api, abort
 import torch
 from cifar10 import CIFAR10
 import os
 
+import io
+import pickle
+import base64
+
 import sys
-sys.path.extend(['./model_module', './user_module'])
+sys.path.extend(['./model_module', './user_module', './image_module'])
 
 from model import Model
 from users import User
+from images import Image
 
 UPLOAD_FOLDER = './'
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif', '.pt'])
@@ -23,6 +29,7 @@ api = Api(application)
 
 model_module = Model()
 user_module = User()
+image_module = Image()
 
 def error(e, **kwargs):
     if e.args[0] == 0:
@@ -60,25 +67,68 @@ class Model(Resource):
             error(e, model_id=model_id, model_type_id=model_type_id)
         return response
            
+class Images(Resource):
+    def get(self, image_id):
+        json_data = json.dumps({"image_id": image_id})
+        try:
+            response = model_module.get_device(json_data)
+        except ValueError as e:
+            error(e, image_id=image_id)
+        response['image_id'] = image_id
+        return response
+
+    def delete(self, image_id):
+        json_data = json.dumps({"image_id": str(image_id)})
+        try:
+            response = model_module.delete_model(json_data)
+        except ValueError as e:
+            error(e, image_id=image_id)
+        return response
+
+    def put(self, image_id):
+        json_data = {"image_id": str(image_id)}
+        label = request.form['class']
+        json_data['class'] = label
+        json_data = json.dumps(json_data)
+
+        try:
+            response = image_module.update_image(json_data)
+        except ValueError as e:
+            error(e, image_id=image_id)
+        return response
+           
+class ImageList(Resource):
+    def post(self):
+        image_file = request.files['image']
+        benchmark = request.form['benchmark']
+        label = request.form['label']
+        fname = secure_filename(model_file.filename)
+        image_file.save(fname)
+        json_data = {}
+        json_data['path'] = fname
+        json_data['name'] = fname
+        json_data['label'] = label
+        json_data['benchmark'] = benchmark
+        json_data = json.dumps(json_data)
+        try:
+            image_id = image_module.create(json_data)
+        except ValueError as e:
+            error(e)
+        return {"image_id": image_id}
+
 class ModelList(Resource):
     def post(self):
         model_file = request.files['model_file']
-        name = request.form['name']
+        filename = request.form['filename']
         user_id = request.form['user_id']
-        print(type(model_file))
-        print()
-        print()
-        print(name)
-        print()
-        print()
-        print(request.files)
+        benchmark = request.form['benchmark']
         fname = secure_filename(model_file.filename)
-        print(type(fname))
         model_file.save(fname)
         json_data = {}
         json_data['path'] = fname
-        json_data['name'] = name
+        json_data['name'] = filename
         json_data['user_id'] = user_id
+        json_data['benchmark'] = benchmark
         json_data = json.dumps(json_data)
         try:
             model_id = model_module.create(json_data)
@@ -103,6 +153,7 @@ class UsersList(Resource):
 
 api.add_resource(ModelList, '/models')
 api.add_resource(UsersList, '/users')
+api.add_resource(ImageList, '/images')
 
 @application.route('/models', methods=["GET"])
 def get_user_models():
@@ -128,6 +179,67 @@ def get_user_by_email():
         error(e, email=email)
         return {"error": "User email " + email + " not registered"}
     return {"user_id": user_id}
+
+@application.route('/images', methods=["GET"])
+def get_benchmark_image():
+    benchmark = request.args.get('benchmark', type=int)
+    json_data = {}
+    json_data['benchmark'] = benchmark
+    json_data = json.dumps(json_data)
+    try:
+        images = image_module.get_benchmark_images(json_data)
+    except ValueError as e:
+        error(e)
+        return {"error": "Error while getting images"}
+
+    image_files = []
+    for i, image in enumerate(images):
+        pickled_image = pickle.loads(image['image'])
+        img_byte_arr = io.BytesIO()
+        pickled_image.save(img_byte_arr, format='png')
+        img_byte_arr = img_byte_arr.getvalue()
+        img_byte_arr = base64.encodebytes(img_byte_arr).decode('ascii')
+        image_files.append(('class'+str(i), img_byte_arr))
+
+    fields = {}
+    for label, image in image_files:
+        fields[label] = (label + '.png', image, 'image/png')
+
+    mpencoder = MultipartEncoder(fields=fields)
+
+    return Response(mpencoder.to_string(), mimetype=mpencoder.content_type)
+
+@application.route('/images', methods=["GET"])
+def get_class_image():
+    label = request.args.get('class', type=int)
+    benchmark = request.args.get('benchmark', type=int)
+    json_data = {}
+    json_data['class'] = label
+    json_data['benchmark'] = benchmark
+    json_data = json.dumps(json_data)
+    try:
+        images = image_module.get_class_images(json_data)
+    except ValueError as e:
+        error(e)
+        return {"error": "Error while getting images"}
+
+    image_files = []
+    for i, image in enumerate(images):
+        pickled_image = pickle.loads(image['image'])
+        img_byte_arr = io.BytesIO()
+        pickled_image.save(img_byte_arr, format='png')
+        img_byte_arr = img_byte_arr.getvalue()
+        img_byte_arr = base64.encodebytes(img_byte_arr).decode('ascii')
+        image_files.append(('class'+str(i), img_byte_arr))
+
+    fields = {}
+    for label, image in image_files:
+        fields[label] = (label + '.png', image, 'image/png')
+
+    mpencoder = MultipartEncoder(fields=fields)
+
+    return Response(mpencoder.to_string(), mimetype=mpencoder.content_type)
+    #return {"images": images}
 
 @application.route('/')
 def index():
