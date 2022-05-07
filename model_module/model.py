@@ -91,15 +91,38 @@ class Model:
         user_id = json_data['user_id']
         
         response = self.db.models.find({"user_id": user_id})
+        # benchmarks = self.db.benchmarks.find()
+        # bs = {}
+        # for b in benchmarks:
+        #    b['_id'] = str(b['_id'])
+        #    bs[b['_id']] = b['benchmark']
         #print(response)
         results = []
         for model in response:
             del model['model']
             model['id'] = str(model['_id'])
             del model['_id']
+            # model['benchmark'] = bs[model['benchmark']]
             print('model', model)
             print()
             results.append(model)
 
         print(results)
         return results
+
+    def predict(self, json_data):
+        self.logger.info('Predict a class for an image')
+
+        self._check_json(json_data)
+        json_data = json.loads(json_data)
+        
+        required_data = ['image_id', 'model_id']
+        required_exist = [elem in json_data.keys() for elem in required_data]
+        if not all(required_exist):
+            missing_data = list(set(required_data) \
+                    - set(compress(required_data, required_exist)))
+            self.logger.error("Missing required data %s", missing_data)
+            raise ValueError(11, "Missing required data %s", missing_data)
+
+        model_id = json_data['model_id']
+        image_id = json_data['image_id']

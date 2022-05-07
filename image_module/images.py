@@ -124,3 +124,43 @@ class Image:
                 classes.append(im['class'])
 
         return images
+
+    def get_benchmarks(self):
+        self.logger.info('Get benchmarks')
+
+        response = self.db.benchmarks.find()
+        benchmarks = []
+        for benchmark in response:
+            benchmark['id'] = str(benchmark['_id'])
+            del benchmark['_id']
+            benchmarks.append(benchmark)
+        return benchmarks
+
+
+    def class_names(self, json_data):
+        self.logger.info('Get benchmark class names')
+
+        self._check_json(json_data)
+        json_data = json.loads(json_data)
+        
+        required_data = ['benchmark']
+        required_exist = [elem in json_data.keys() for elem in required_data]
+        if not all(required_exist):
+            missing_data = list(set(required_data) \
+                    - set(compress(required_data, required_exist)))
+            self.logger.error("Missing required data %s", missing_data)
+            raise ValueError(11, "Missing required data %s", missing_data)
+
+        benchmark = json_data['benchmark']
+        
+        response = self.db.class_names.find({"benchmark": benchmark})
+        benchmark = self.db.benchmarks.find({"_id": ObjectId(benchmark)})
+        class_names = []
+        for c in response:
+            c['id'] = str(c['_id'])
+            del c['_id']
+            c['benchmark'] = benchmark['benchmark']
+            class_names.append(c)
+
+        return class_names
+

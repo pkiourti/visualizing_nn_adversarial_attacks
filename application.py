@@ -138,9 +138,6 @@ class ModelList(Resource):
 
 class UsersList(Resource):
     def post(self):
-        print()
-        print(request)
-        print()
         json_data = {}
         json_data['name'] = request.json['name']
         json_data['email'] = request.json['email']
@@ -181,8 +178,8 @@ def get_user_by_email():
     return {"user_id": user_id}
 
 @application.route('/images', methods=["GET"])
-def get_benchmark_image():
-    benchmark = request.args.get('benchmark', type=int)
+def get_benchmark_images():
+    benchmark = request.args.get('benchmark', type=str)
     json_data = {}
     json_data['benchmark'] = benchmark
     json_data = json.dumps(json_data)
@@ -199,7 +196,7 @@ def get_benchmark_image():
         pickled_image.save(img_byte_arr, format='png')
         img_byte_arr = img_byte_arr.getvalue()
         img_byte_arr = base64.encodebytes(img_byte_arr).decode('ascii')
-        image_files.append(('class'+str(i), img_byte_arr))
+        image_files.append(('class'+str(image['class']), img_byte_arr))
 
     fields = {}
     for label, image in image_files:
@@ -239,7 +236,29 @@ def get_class_image():
     mpencoder = MultipartEncoder(fields=fields)
 
     return Response(mpencoder.to_string(), mimetype=mpencoder.content_type)
-    #return {"images": images}
+
+@application.route('/benchmarks', methods=["GET"])
+def get_benchmarks():
+    try:
+        benchmarks = image_module.get_benchmarks()
+    except ValueError as e:
+        error(e)
+        return {"error": "Error while getting images"}
+
+    return {"benchmarks": benchmarks}
+    
+@application.route('/class_names', methods=["GET"])
+def get_class_names():
+    benchmark = request.args.get('benchmark', type=str)
+    json_data = {}
+    json_data['benchmark'] = benchmark
+    json_data = json.dumps(json_data)
+    try:
+        class_names = image_module.get_class_names(json_data)
+    except ValueError as e:
+        return error(e)
+
+    return {"class_names": class_names}
 
 @application.route('/')
 def index():
