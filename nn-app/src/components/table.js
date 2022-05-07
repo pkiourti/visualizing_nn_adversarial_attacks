@@ -13,18 +13,20 @@ const Table = ({ rows, columns, rowKeyGetter }) => {
 }*/
 import MaterialTable from 'material-table';
 
-const Table = ({rows, columns, onSelectRow}) => {
+const Table = ({title, rows, columns, onSelectRow}) => {
     return (
         <MaterialTable
-            title='Your models'
+            title={title}
             columns={columns}
             data={rows}
             options={{
               search: false,
-            }}
-            rowStyle={{
-              width: "100px",
-              textAlign: 'center'
+              cellStyle: {
+                  textAlign: 'center'
+              },
+              headerStyle: {
+                  textAlign: 'center'
+              }
             }}
             onRowClick={(e, rowData) => onSelectRow(e, rowData)}
         />

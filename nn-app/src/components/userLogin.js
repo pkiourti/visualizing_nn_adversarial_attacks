@@ -6,10 +6,10 @@ const UserLogin = (props) => {
     return (
         <div className="row" style={{padding: "10% 0"}}>
             <div className="col-md-12">
-                <form>
+                <form className="needs-validation">
                   <div className="form-group" style={{margin: 10}}>
                     <label className="form-label" htmlFor="customFile">Your registered email</label>
-                    <input type="email" name="email" className="form-control" id="model-file" onChange={props.onEmailChange}/>
+                    <input type="email" name="email" className="form-control" id="model-file" onChange={props.onEmailChange} required/>
                     <small id="emailHelp" className="form-text text-muted">Your email is used to associate your profile with your models</small>
                   </div>
                 <Button type="button" className="btn btn-primary" style={{margin: 20}} onClick={props.onLogin}>See your page</Button>
