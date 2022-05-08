@@ -43,16 +43,13 @@ cd ~/ec530/final_project/visualizing_nn_adversarial_attacks/
 export FLASK_APP="application.py"
 flask run
 ```
-### Screenshots
-## Screenshots of React Native App
-Screenshots of the application:
-- <img src="https://github.com/pkiourti/visualizing_nn_adversarial_attacks/blob/main/screenshots/login.png" width="250" height="400">
-- <img src="https://github.com/pkiourti/visualizing_nn_adversarial_attacks/blob/main/screenshots/login-data.png" width="250" height="400">
-- <img src="https://github.com/pkiourti/visualizing_nn_adversarial_attacks/blob/main/screenshots/models_table.png" width="250" height="400">
-- <img src="https://github.com/pkiourti/visualizing_nn_adversarial_attacks/blob/main/screenshots/image_categories.png" width="250" height="400">
-- <img src="https://github.com/pkiourti/visualizing_nn_adversarial_attacks/blob/main/screenshots/images.png" width="250" height="400">
-- <img src="https://github.com/pkiourti/visualizing_nn_adversarial_attacks/blob/main/screenshots/attack-page.png" width="250" height="400">
-- <img src="https://github.com/pkiourti/visualizing_nn_adversarial_attacks/blob/main/screenshots/attack-page-form.png" width="250" height="400">
-- <img src="https://github.com/pkiourti/patient_monitor/blob/main/screenshots/attack-page-form-data.png" width="250" height="400">
-- <img src="https://github.com/pkiourti/patient_monitor/blob/main/screenshots/results.png" width="250" height="400">
-
+### Screenshots of the application:
+- <img src="https://github.com/pkiourti/visualizing_nn_adversarial_attacks/blob/main/screenshots/login.png" width="500" height="500">
+- <img src="https://github.com/pkiourti/visualizing_nn_adversarial_attacks/blob/main/screenshots/login-data.png" width="500" height="500">
+- <img src="https://github.com/pkiourti/visualizing_nn_adversarial_attacks/blob/main/screenshots/models_table.png" width="500" height="500">
+- <img src="https://github.com/pkiourti/visualizing_nn_adversarial_attacks/blob/main/screenshots/image_categories.png" width="500" height="500">
+- <img src="https://github.com/pkiourti/visualizing_nn_adversarial_attacks/blob/main/screenshots/images.png" width="500" height="500">
+- <img src="https://github.com/pkiourti/visualizing_nn_adversarial_attacks/blob/main/screenshots/attack-page.png" width="500" height="500">
+- <img src="https://github.com/pkiourti/visualizing_nn_adversarial_attacks/blob/main/screenshots/attack-page-form.png" width="500" height="500">
+- <img src="https://github.com/pkiourti/visualizing_nn_adversarial_attacks/blob/main/screenshots/attack-page-form-with-data.png" width="500" height="500">
+- <img src="https://github.com/pkiourti/visualizing_nn_adversarial_attacks/blob/main/screenshots/results.png" width="500" height="500">
