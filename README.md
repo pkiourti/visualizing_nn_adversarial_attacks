@@ -1,4 +1,4 @@
-# visualizing_nn_adversarial_attacks
+# Visualizing Neural Network Adversarial Attacks
 
 ## Description
 This project aims to provide an application that implements different types of backdoor attacks. Through the interface the user: 
