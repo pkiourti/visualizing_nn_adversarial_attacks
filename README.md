@@ -73,4 +73,5 @@ flask run
 <img src="https://github.com/pkiourti/visualizing_nn_adversarial_attacks/blob/main/screenshots/attack-page-form-with-data.png">
 
 #### After determining the details of the attack, we click on Test and see the results
+As we can see, the poisoned image contains the white rectangle on the bottom right of the image. This causes the image to be misclassified as airplane. It also causes 80.17% of the images to be misclassified as airplane.
 <img src="https://github.com/pkiourti/visualizing_nn_adversarial_attacks/blob/main/screenshots/results.png">
