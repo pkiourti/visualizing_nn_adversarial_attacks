@@ -43,6 +43,9 @@ cd ~/ec530/final_project/visualizing_nn_adversarial_attacks/
 export FLASK_APP="application.py"
 flask run
 ```
+### Database Schema
+- <img src="https://github.com/pkiourti/visualizing_nn_adversarial_attacks/blob/main/screenshots/db-schema.png">
+
 ### Screenshots of the application:
 - <img src="https://github.com/pkiourti/visualizing_nn_adversarial_attacks/blob/main/screenshots/login.png">
 - <img src="https://github.com/pkiourti/visualizing_nn_adversarial_attacks/blob/main/screenshots/login-data.png">
@@ -53,3 +56,4 @@ flask run
 - <img src="https://github.com/pkiourti/visualizing_nn_adversarial_attacks/blob/main/screenshots/attack-page-form.png">
 - <img src="https://github.com/pkiourti/visualizing_nn_adversarial_attacks/blob/main/screenshots/attack-page-form-with-data.png">
 - <img src="https://github.com/pkiourti/visualizing_nn_adversarial_attacks/blob/main/screenshots/results.png">
+
