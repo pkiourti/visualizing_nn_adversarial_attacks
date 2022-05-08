@@ -3,7 +3,7 @@
 ## Description
 This project aims to provide an application that implements different types of backdoor attacks. Through the interface the user: 
 1) can upload their model in an onnx format and store it in the database
-2) select one of their models to test how robust is to backdoor attacks
+2) select one of their models to test its robustness to backdoor attacks
 3) select the image category and the image they want to attack
 4) select the attack specifics (type, color, etc.)
 5) attack the model (using the Test button) and observe if the label of the image changed after the injection of the backdoor. The application also poisons all the existing images for this model in order to produce statistics on the predicted labels of these poisoned images. The results are shown in a table. 
