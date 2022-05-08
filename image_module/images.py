@@ -70,6 +70,9 @@ class Image:
         #TODO: delete local file
 
     def get_class_images(self, json_data):
+        """
+            returns a list os all objects that store an image of the chosen class 
+        """
         self.logger.info('Get class images')
 
         self._check_json(json_data)
@@ -93,9 +96,10 @@ class Image:
             del im['_id']
             images.append(im)
 
+        print(len(images))
         return images
 
-    def get_benchmark_images(self, json_data):
+    def get_image_categories(self, json_data):
         self.logger.info('Get benchmark images')
 
         self._check_json(json_data)
@@ -137,7 +141,7 @@ class Image:
         return benchmarks
 
 
-    def class_names(self, json_data):
+    def get_class_names(self, json_data):
         self.logger.info('Get benchmark class names')
 
         self._check_json(json_data)
@@ -159,8 +163,27 @@ class Image:
         for c in response:
             c['id'] = str(c['_id'])
             del c['_id']
-            c['benchmark'] = benchmark['benchmark']
+            #c['benchmark'] = benchmark['benchmark']
             class_names.append(c)
 
         return class_names
 
+    def get_image(self, json_data):
+        self.logger.info('Get image')
+
+        self._check_json(json_data)
+        json_data = json.loads(json_data)
+        
+        required_data = ['image_id']
+        required_exist = [elem in json_data.keys() for elem in required_data]
+        if not all(required_exist):
+            missing_data = list(set(required_data) \
+                    - set(compress(required_data, required_exist)))
+            self.logger.error("Missing required data %s", missing_data)
+            raise ValueError(11, "Missing required data %s", missing_data)
+
+        image_id = json_data['image_id']
+        
+        image = self.db.images.find_one({"_id": ObjectId(image_id)})
+        image['id'] = str(image['_id'])
+        return { 'id': image['id'], 'image': pickle.loads(image['image'])}

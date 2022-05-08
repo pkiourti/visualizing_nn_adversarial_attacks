@@ -9,6 +9,8 @@ from bson.objectid import ObjectId
 from werkzeug.utils import secure_filename
 import torch
 from cifar10 import CIFAR10
+import onnx
+import onnxruntime
 
 class Model:
 
@@ -51,17 +53,13 @@ class Model:
         name = json_data['name']
         user_id = json_data['user_id']
         benchmark = json_data['benchmark']
-        model = CIFAR10()
-        model.load_state_dict(torch.load(path, map_location=torch.device('cpu')))
-        print(model)
-        
-        model_type_id = 0
+        onnx_model = onnx.load(path)
+        onnx.checker.check_model(onnx_model)
         created_at = datetime.utcnow()
 
         model = {
-            "model": pickle.dumps(model),
+            "model": pickle.dumps(onnx_model),
             "name": name,
-            "model_type_id": model_type_id,
             "user_id": user_id,
             "benchmark": benchmark,
             "created_at": created_at
@@ -91,20 +89,11 @@ class Model:
         user_id = json_data['user_id']
         
         response = self.db.models.find({"user_id": user_id})
-        # benchmarks = self.db.benchmarks.find()
-        # bs = {}
-        # for b in benchmarks:
-        #    b['_id'] = str(b['_id'])
-        #    bs[b['_id']] = b['benchmark']
-        #print(response)
         results = []
         for model in response:
             del model['model']
             model['id'] = str(model['_id'])
             del model['_id']
-            # model['benchmark'] = bs[model['benchmark']]
-            print('model', model)
-            print()
             results.append(model)
 
         print(results)
