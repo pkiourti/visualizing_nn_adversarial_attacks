@@ -54,7 +54,7 @@ flask run
 ### Database Schema
 <img src="https://github.com/pkiourti/visualizing_nn_adversarial_attacks/blob/main/screenshots/db-schema.png">
 
-### Architecture for the upload functionality that uploads a model to the server and saving it to the Database
+### Architecture for the upload functionality that uploads a model to the server and saves it to the Database
 <img src="https://github.com/pkiourti/visualizing_nn_adversarial_attacks/blob/main/screenshots/architecture-upload-functionality.png">
 
 ### Screenshots of the application:
