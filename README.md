@@ -66,6 +66,13 @@ cd ~/ec530/final_project/visualizing_nn_adversarial_attacks/
 export FLASK_APP="application.py"
 flask run
 ```
+
+### Start the application
+```
+cp nn-app
+npm start
+```
+
 ### Database Schema
 <img src="https://github.com/pkiourti/visualizing_nn_adversarial_attacks/blob/main/screenshots/db-schema.png">
 
