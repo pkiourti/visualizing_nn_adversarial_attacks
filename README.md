@@ -26,7 +26,7 @@ sudo apt-get update
 sudo apt-get install -y mongodb-org
 ```
 ### Install and start ngrok
-I used ngrok to access the Flask server that runs locally on port 5000 (started in the previous step). I couldn't access the deployed AWS Flask server or even the one running localhost without ngrok. ngrok is a simple solution to expose a local server to the Internet. Download tar file from here: https://ngrok.com/download:
+I used ngrok to access the Flask server that runs locally on port 5000 (started in the previous step). I couldn't access localhost without ngrok. ngrok is a simple solution to expose a local server to the Internet. Download tar file from here: https://ngrok.com/download:
 ```
 sudo tar xvzf ~/Downloads/ngrok-stable-linux-amd64.tgz -C /usr/local/bin
 cd ~/Downloads/ngrok-stable-linux-amd64
