@@ -21,7 +21,7 @@
 ## Description
 This project aims to provide an application that implements the injection of different types of backdoor attacks (patterns) to images that are fed to classification networks. Through the interface the user: 
 1) can upload their model in an onnx format and store it in the database
-2) select one of their models to test its robustness to backdoor attacks
+2) select one of their models to test its robustness to backdoor attacks (I used part of this repository [trojai](https://github.com/trojai/trojai) to implement some of the backdoors)
 3) select the image category and the image they want to attack
 4) select the attack specifics (type, color, etc.)
 5) attack the model (using the Test button) and observe if the label of the image changed after the injection of the backdoor. The application then poisons all the images in order to observe the predicted labels of these poisoned images. The results are shown in a table. 
@@ -33,7 +33,7 @@ Initial proposal of the project was written [here](https://docs.google.com/prese
 ```
 conda create -n final python
 conda activate final
-conda install --file requirements.txt 
+conda install --file requirements.txt -c conda-forge
 ```
 
 ### Install MongoDB on Ubuntu
