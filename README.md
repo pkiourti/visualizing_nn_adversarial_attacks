@@ -8,6 +8,8 @@ This project aims to provide an application that implements the injection of dif
 4) select the attack specifics (type, color, etc.)
 5) attack the model (using the Test button) and observe if the label of the image changed after the injection of the backdoor. The application then poisons all the images in order to observe the predicted labels of these poisoned images. The results are shown in a table. 
 
+Initial proposal of the project was written [here](https://docs.google.com/presentation/d/1f8Wqdt2OyK91DvPlZjxMmBh773Jqk6X9Et0tViun6Cg/edit?usp=sharing).
+
 ## Setup
 ### Install dependencies from requirements.txt
 ```
