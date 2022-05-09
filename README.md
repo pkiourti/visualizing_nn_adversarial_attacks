@@ -26,7 +26,7 @@ sudo apt-get update
 sudo apt-get install -y mongodb-org
 ```
 ### Install and start ngrok
-I used ngrok to access the Flask server that runs locally on port 5000 (started in the previous step). I couldn't access the deployed AWS Flask server or even the one running localhost without ngrok. ngrok is a simple solution to expose a local server to the Internet. Download tar file from here: https://ngrok.com/download:
+I used ngrok to access the Flask server that runs locally on port 5000 (started in the previous step). I couldn't access localhost without ngrok. ngrok is a simple solution to expose a local server to the Internet. Download tar file from here: https://ngrok.com/download:
 ```
 sudo tar xvzf ~/Downloads/ngrok-stable-linux-amd64.tgz -C /usr/local/bin
 cd ~/Downloads/ngrok-stable-linux-amd64
@@ -37,25 +37,42 @@ Change line 13 of the nn-app/src/App.js from
 
 ### Install dependencies for React
 ```
-cd ~/ec530/final_project/visualizing_nn_adversarial_attacks/nn-app 
+cd visualizing_nn_adversarial_attacks/nn-app 
 npm install
 ```
+
 ### Start MongoDB
 ```
 sudo systemctl start mongod
 ```
+
 ### Prepare Database
+In this project we work with the following datasets (or benchmarks):
+- [CIFAR10](https://www.cs.toronto.edu/~kriz/cifar.html)
+- [German Traffic Sign Recognition Benchmark (GTSRB)](https://benchmark.ini.rub.de/)
+- MNIST
+- Fashion MNIST
+This means that the models that are uploaded to the application and tested should be trained on one of these datasets.
+
+Use the following command before you start the application to setup some tables and add the fixed validation images of each benchmark into the database.
 ```
-python3
+python3 prepare_database.py
 ```
 
 ### Start the Flask server
 In order to run the tests or use any part of this code from its home directory you need to set the FLASK environment variable as follows:
 ```
-cd ~/ec530/final_project/visualizing_nn_adversarial_attacks/
+cd visualizing_nn_adversarial_attacks/
 export FLASK_APP="application.py"
 flask run
 ```
+
+### Start the application
+```
+cp visualizing_nn_adversarial_attacks/nn-app
+npm start
+```
+
 ### Database Schema
 <img src="https://github.com/pkiourti/visualizing_nn_adversarial_attacks/blob/main/screenshots/db-schema.png">
 
