@@ -52,6 +52,7 @@ In this project we work with the following datasets (or benchmarks):
 - [German Traffic Sign Recognition Benchmark (GTSRB)](https://benchmark.ini.rub.de/)
 - MNIST
 - Fashion MNIST
+- 
 This means that the models that are uploaded to the application and tested should be trained on one of these datasets.
 
 Use the following command before you start the application to setup some tables and add the fixed validation images of each benchmark into the database.
@@ -102,7 +103,10 @@ outputs = ort_session.run(None, ort_inputs)[0]
 labels = [l.argmax() for l in outputs]
 ```
 
-Before all that, if you don't have a model in an onnx format you can take a look at an example udner convert_to_onnx.py that converts a pytorch model to onnx. Some models in onnx format are provided under `models/` 
+Before all that, if you don't have a model in an onnx format you can take a look at an example udner convert_to_onnx.py that converts a pytorch model to onnx. Some models in onnx format are provided under `models/`.
+
+### Sending images from Flask to React
+Sending a 1000 images from the database to the React frontend can be tricky especially if you want to render them instead of downloading them. In order to achieve that I created a `MultipartEncoder` response in Flask where each part is an image that is converted first to bytes using io.BytesIO() and then to a base64 string using base64.encodebytes(). I set each part of the response to content-type 'image/png'. This allows the React frontend to parse the response as `formData` and iterate over all the parts where the images are stored as base64 that can be used to render them as <img src="data:image/png;base64,{base64_string_of_the_image}">.
 
 ### Database Schema
 <img src="https://github.com/pkiourti/visualizing_nn_adversarial_attacks/blob/main/screenshots/db-schema.png">
