@@ -40,14 +40,16 @@ Change line 13 of the nn-app/src/App.js from
 cd ~/ec530/final_project/visualizing_nn_adversarial_attacks/nn-app 
 npm install
 ```
+
 ### Start MongoDB
 ```
 sudo systemctl start mongod
 ```
+
 ### Prepare Database
 In this project we work with the following datasets (or benchmarks):
-- CIFAR10
-- German Traffic Sign Recognition Benchmark (GTSRB)
+- [CIFAR10](!https://www.cs.toronto.edu/~kriz/cifar.html)
+- [German Traffic Sign Recognition Benchmark (GTSRB)](https://benchmark.ini.rub.de/)
 - MNIST
 - Fashion MNIST
 This means that the models that are uploaded to the application and tested should be trained on one of these datasets.
