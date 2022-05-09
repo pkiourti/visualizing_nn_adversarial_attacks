@@ -95,7 +95,7 @@ npm start
 
 ### NOTES 
 #### ONNX
-Your model should be uploaded as a ".onnx" file. Hence, the versions of pytorch or tensorflow used by the model while training it don't matter. [Onnx](https://onnx.ai/) is a  useful tool to pass all the information (both neural network architecture and weights) in one file. It comes handy when your model is trained using Tensorflow and the application uses pytorch models. So you can use this tool to convert from one to another format. I used the onnx format to upload the model as one file, which I then `pickle` and store in the database. In order to load the model later from the database and can retrieve the inference session from the loaded model by doing the following:
+Your model should be uploaded as a ".onnx" file. Hence, the versions of pytorch or tensorflow used by the model while training it don't matter. [Onnx](https://onnx.ai/) is a  useful tool to pass all the information (both neural network architecture and weights) in one file. It comes very handy for example when your model is trained using Pytorch and an application uses Tensorflow. Hence, I used this format that allows exchange so that no specific version is required and also to be able to upload the model as one file, which I then `pickle` and store in the database. In order to load the model later from the database and can retrieve the inference session from the loaded model by doing the following:
 
 ```
 import pickle
