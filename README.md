@@ -123,7 +123,7 @@ outputs = ort_session.run(None, ort_inputs)[0]
 labels = [l.argmax() for l in outputs]
 ```
 
-Before all that, if you don't have a model in an onnx format you can take a look at an example udner convert_to_onnx.py that converts a pytorch model to onnx. Some models in onnx format are provided under `models/`.
+Before all that, if you don't have a model in an onnx format you can take a look at an example in `convert_to_onnx.py` that converts a pytorch model to onnx. Some models in onnx format are provided under `models/`.
 
 #### Sending images from Flask to React
 Sending 1000 images from Flask (from the DB) to the React frontend can be tricky especially if you want to render them instead of downloading them. In order to achieve that I created a `MultipartEncoder` response in Flask where each part is an image that is converted first to bytes using io.BytesIO() and then to a `base64` string using `base64.encodebytes()`. I set the content-type of each part of the response to 'image/png'. This allows the React frontend to parse the response as `formData` and iterate over all the parts where the images are stored as `base64` strings which can be used to render them as `<img src="data:image/png;base64,{base64_string_of_the_image}">`.
