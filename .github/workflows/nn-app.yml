@@ -25,7 +25,7 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         python -m pip install flake8 pytest coverage
-        if [ -f requirements.txt ]; then python -m pip install -r requirements.txt; fi
+        if [ -f requirements.txt ]; then $CONDA/bin/conda install --file requirements.txt -c  -c conda-forge; fi
     - name: Start MongoDB
       uses: supercharge/mongodb-github-action@1.7.0
       with:
