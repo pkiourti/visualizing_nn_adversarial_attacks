@@ -34,12 +34,12 @@ jobs:
       run: |
         $CONDA/bin/python3 prepare_database.py
         export FLASK_APP="application.py" 
-        flask run &
+        $CONDA/bin/flask run &
         $CONDA/bin/pytest
     - name: Run Coverage
       run: |
         $CONDA/bin/python3 prepare_database.py
         export FLASK_APP="application.py" 
-        flask run &
+        $CONDA/bin/flask run &
         $CONDA/bin/coverage run -m pytest
         $CONDA/bin/coverage report

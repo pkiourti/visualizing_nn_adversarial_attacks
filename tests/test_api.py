@@ -5,7 +5,7 @@ import time
 from pymongo import MongoClient
 from bson.objectid import ObjectId
 from PIL import Image
-# import pickle
+import pickle
 # import base64
 # import io
 import os
