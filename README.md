@@ -37,7 +37,7 @@ Change line 13 of the nn-app/src/App.js from
 
 ### Install dependencies for React
 ```
-cd ~/ec530/final_project/visualizing_nn_adversarial_attacks/nn-app 
+cd visualizing_nn_adversarial_attacks/nn-app 
 npm install
 ```
 
@@ -62,14 +62,14 @@ python3 prepare_database.py
 ### Start the Flask server
 In order to run the tests or use any part of this code from its home directory you need to set the FLASK environment variable as follows:
 ```
-cd ~/ec530/final_project/visualizing_nn_adversarial_attacks/
+cd visualizing_nn_adversarial_attacks/
 export FLASK_APP="application.py"
 flask run
 ```
 
 ### Start the application
 ```
-cp nn-app
+cp visualizing_nn_adversarial_attacks/nn-app
 npm start
 ```
 
