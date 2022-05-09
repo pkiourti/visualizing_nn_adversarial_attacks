@@ -52,7 +52,7 @@ In this project we work with the following datasets (or benchmarks):
 - [German Traffic Sign Recognition Benchmark (GTSRB)](https://benchmark.ini.rub.de/)
 - MNIST
 - Fashion MNIST
-- 
+
 This means that the models that are uploaded to the application and tested should be trained on one of these datasets.
 
 Use the following command before you start the application to setup some tables and add the fixed validation images of each benchmark into the database.
@@ -108,11 +108,12 @@ Before all that, if you don't have a model in an onnx format you can take a look
 #### Sending images from Flask to React
 Sending 1000 images from Flask (from the DB) to the React frontend can be tricky especially if you want to render them instead of downloading them. In order to achieve that I created a `MultipartEncoder` response in Flask where each part is an image that is converted first to bytes using io.BytesIO() and then to a `base64` string using `base64.encodebytes()`. I set the content-type of each part of the response to 'image/png'. This allows the React frontend to parse the response as `formData` and iterate over all the parts where the images are stored as `base64` strings which can be used to render them as `<img src="data:image/png;base64,{base64_string_of_the_image}">`.
 
+#### Uploading a model to the server
+The image below shows the tools used to upload a model sent as a single file to the server and save it to the database. In Python, `werkzeug` provides a data structure called `FileStorage` that can is used when sending any file to the Flask server and accessing it using request.files. 
+<img src="https://github.com/pkiourti/visualizing_nn_adversarial_attacks/blob/main/screenshots/architecture-upload-functionality.png">
+
 ### Database Schema
 <img src="https://github.com/pkiourti/visualizing_nn_adversarial_attacks/blob/main/screenshots/db-schema.png">
-
-### Architecture for the upload functionality that uploads a model to the server and saves it to the Database
-<img src="https://github.com/pkiourti/visualizing_nn_adversarial_attacks/blob/main/screenshots/architecture-upload-functionality.png">
 
 ### Screenshots of the application:
 #### Login Screen
