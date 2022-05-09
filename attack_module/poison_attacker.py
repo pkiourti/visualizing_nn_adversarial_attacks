@@ -1,11 +1,7 @@
 from image_triggers import ReverseLambdaPattern, RandomRectangularPattern, RectangularPattern
-import matplotlib.pyplot as plt
-from mpl_toolkits.axes_grid1 import make_axes_locatable
-from instafilter import Instafilter
 import numpy as np
 import random
 from itertools import compress
-import torch
 
 class dotdict(dict):
     """dot.notation access to dictionary attributes"""
@@ -150,10 +146,6 @@ class PoisonAttacker:
         return triggers, masks
 
 
-    def apply_filter(self, image):
-        model = Instafilter(self.instagram, map_location=torch.device('cpu'))
-        return model(image)
-
 
     def add_trigger(self, image, start_position, trigger, mask):
         x_start = start_position[0]
@@ -174,8 +166,6 @@ class PoisonAttacker:
             return self.add_trigger(image, start_position, t, m)
         if self.pattern=='noise':
             return image + self.triggers[0, :, :, None]
-        if self.pattern=='instagram':
-            return self.apply_filter(image)
         if self.pattern=='spread':
             t = self.triggers[0]
             m = self.masks[0]
@@ -208,19 +198,6 @@ class PoisonAttacker:
         self.original_labels = y
         self.poisoned_images = np.asarray(self.poisoned_images)
         self.poison_indices = indices_to_poison
-
-    def plot_image(self, image, cmap='gray', title=''):
-        fontsize=17
-        fig = plt.figure()
-        ax = fig.add_subplot(1,1,1) 
-        
-        im = ax.imshow(image, cmap=cmap)
-        divider = make_axes_locatable(ax)
-        cax = divider.append_axes('right', size='3%', pad=0.05)
-        cax.tick_params(labelsize=15)
-        fig.colorbar(im, cax=cax, orientation='vertical')
-        ax.set_title(title, fontsize=fontsize)
-
 
     def get_name(self):
         required_args = self.get_required_args()

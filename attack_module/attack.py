@@ -8,8 +8,6 @@ import pickle
 import numpy as np
 from itertools import compress
 from bson.objectid import ObjectId
-from werkzeug.utils import secure_filename
-import torch
 from poison_attacker import PoisonAttacker
 import onnxruntime
 

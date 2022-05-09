@@ -4,7 +4,6 @@ from flask_cors import CORS
 from requests_toolbelt import MultipartEncoder
 from werkzeug.utils import secure_filename
 from flask_restful import Resource, Api, abort
-import torch
 import numpy as np
 import os
 
@@ -39,36 +38,6 @@ def error(e, **kwargs):
     if e.args[0] == 1:
         return abort(404, message="User email {} doesn't exist".format(kwargs['email']))
 
-class Model(Resource):
-    def get(self, model_id):
-        json_data = json.dumps({"model_id": model_id})
-        try:
-            response = model_module.get_device(json_data)
-        except ValueError as e:
-            error(e, model_id=model_id)
-        response['model_id'] = model_id
-        return response
-
-    def delete(self, model_id):
-        json_data = json.dumps({"model_id": str(model_id)})
-        try:
-            response = model_module.delete_model(json_data)
-        except ValueError as e:
-            error(e, model_id=model_id)
-        return response
-
-    def put(self, model_id):
-        json_data = {"model_id": str(model_id)}
-        model_type_id = request.form['model_type_id']
-        json_data['model_type_id'] = model_type_id
-        json_data = json.dumps(json_data)
-
-        try:
-            response = model_module.update_model(json_data)
-        except ValueError as e:
-            error(e, model_id=model_id, model_type_id=model_type_id)
-        return response
-           
 class ImageList(Resource):
     def post(self):
         image_file = request.files['image']

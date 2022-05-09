@@ -8,8 +8,6 @@ import pickle
 from itertools import compress
 from bson.objectid import ObjectId
 from werkzeug.utils import secure_filename
-import torch
-from cifar10 import CIFAR10
 
 class Image:
     def __init__(self):
