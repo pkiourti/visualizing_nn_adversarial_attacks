@@ -7,4 +7,4 @@ numpy==1.22.3
 onnx==1.11.0
 onnxruntime==1.11.1
 pillow==9.0.1
-instafilter==0.3.1
+pytest==7.1.1
