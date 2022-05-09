@@ -1,7 +1,7 @@
 # Visualizing Neural Network Adversarial Attacks
 
 ## Description
-This project aims to provide an application that implements different types of backdoor attacks. Through the interface the user: 
+This project aims to provide an application that implements the injection different types of backdoor attacks (patterns) to images that are fed to classification networks. Through the interface the user: 
 1) can upload their model in an onnx format and store it in the database
 2) select one of their models to test its robustness to backdoor attacks
 3) select the image category and the image they want to attack
