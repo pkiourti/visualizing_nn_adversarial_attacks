@@ -8,3 +8,4 @@ onnx==1.11.0
 onnxruntime==1.11.1
 pillow==9.0.1
 pytest==7.1.1
+pymongo==3.12.0
