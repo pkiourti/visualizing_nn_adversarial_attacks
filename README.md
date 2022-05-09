@@ -95,7 +95,7 @@ npm start
 
 ### NOTES 
 #### ONNX
-Your model should be uploaded as a ".onnx" file. Hence, the versions of pytorch or tensorflow used by the model while training it don't matter. [Onnx](https://onnx.ai/) is a  useful tool to pass all the information (both neural network architecture and weights) in one file. It comes very handy for example when your model is trained using Pytorch and an application uses Tensorflow. Hence, I used this format that allows exchange so that no specific version is required and also to be able to upload the model as one file, which I then `pickle` and store in the database. In order to load the model later from the database and can retrieve the inference session from the loaded model by doing the following:
+Your model should be uploaded as a ".onnx" file. Hence, the versions of pytorch or tensorflow used by the model while training it don't matter. [Onnx](https://onnx.ai/) is a  useful tool to pass all the information (both neural network architecture and weights) in one file. It comes very handy for example when your model is trained using Pytorch and an application uses Tensorflow. Hence, I used this format that allows exchange so that no specific version is required and also to be able to upload the model as one file, which I then `pickle` and store in the database. You can load the model later from the database and still be able to retrieve the inference session without saving the model locally by doing the following:
 
 ```
 import pickle
@@ -114,7 +114,7 @@ onnx_model = pickle.loads(model['model'])
 ort_session = onnxruntime.InferenceSession(onnx_model.SerializeToString())
 ```
 
-Then you can use this session to actually predict labels for `images` in the following way:
+Then you can use this session to predict labels for a vector of `images` in the following way:
 ```
 import numpy as np
 ort_inputs = {ort_session.get_inputs()[0].name: np.transpose(images, (0, 3, 1, 2)).astype('float32') / 255.}
