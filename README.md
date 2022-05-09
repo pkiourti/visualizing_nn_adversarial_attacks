@@ -42,8 +42,13 @@ npm install
 ```
 ### Start MongoDB
 ```
-$ sudo systemctl start mongod
+sudo systemctl start mongod
 ```
+### Prepare Database
+```
+python3
+```
+
 ### Start the Flask server
 In order to run the tests or use any part of this code from its home directory you need to set the FLASK environment variable as follows:
 ```
