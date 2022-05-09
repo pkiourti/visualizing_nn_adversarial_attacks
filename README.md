@@ -45,8 +45,16 @@ npm install
 sudo systemctl start mongod
 ```
 ### Prepare Database
+In this project we work with the following datasets (or benchmarks):
+- CIFAR10
+- German Traffic Sign Recognition Benchmark (GTSRB)
+- MNIST
+- Fashion MNIST
+This means that the models that are uploaded to the application and tested should be trained on one of these datasets.
+
+Use the following command before you start the application to setup some tables and add the fixed validation images of each benchmark into the database.
 ```
-python3
+python3 prepare_database.py
 ```
 
 ### Start the Flask server
