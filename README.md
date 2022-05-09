@@ -61,7 +61,6 @@ python3 prepare_database.py
 ```
 
 ### Start the Flask server
-In order to run the tests or use any part of this code from its home directory you need to set the FLASK environment variable as follows:
 ```
 cd visualizing_nn_adversarial_attacks/
 export FLASK_APP="application.py"
