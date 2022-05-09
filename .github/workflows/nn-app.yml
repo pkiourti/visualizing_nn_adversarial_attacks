@@ -32,14 +32,14 @@ jobs:
         mongodb-version: ${{ matrix.mongodb-version }}
     - name: Test with pytest
       run: |
-        python3 prepare_database.py
+        $CONDA/bin/python3 prepare_database.py
         export FLASK_APP="application.py" 
         flask run &
         pytest
     - name: Run Coverage
       run: |
-        python3 prepare_database.py
-        export FLASK_APP="application.py"
+        $CONDA/bin/python3 prepare_database.py
+        export FLASK_APP="application.py" 
         flask run &
         coverage run -m pytest
         coverage report
