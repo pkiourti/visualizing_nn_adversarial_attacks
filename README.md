@@ -73,7 +73,8 @@ cp visualizing_nn_adversarial_attacks/nn-app
 npm start
 ```
 
-### NOTES
+### NOTES 
+#### ONNX
 Your model should be uploaded as a ".onnx" file. Hence, the versions of pytorch or tensorflow used by the model while training it don't matter. [Onnx](https://onnx.ai/) is a  useful tool to pass all the information (both neural network architecture and weights) in one file. It comes handy when your model is trained using Tensorflow and the application uses pytorch models. So you can use this tool to convert from one to another format. I used the onnx format to upload the model as one file, which I then `pickle` and store in the database. In order to load the model later from the database and can retrieve the inference session from the loaded model by doing the following:
 
 ```
@@ -104,8 +105,8 @@ labels = [l.argmax() for l in outputs]
 
 Before all that, if you don't have a model in an onnx format you can take a look at an example udner convert_to_onnx.py that converts a pytorch model to onnx. Some models in onnx format are provided under `models/`.
 
-### Sending images from Flask to React
-Sending a 1000 images from the database to the React frontend can be tricky especially if you want to render them instead of downloading them. In order to achieve that I created a `MultipartEncoder` response in Flask where each part is an image that is converted first to bytes using io.BytesIO() and then to a base64 string using base64.encodebytes(). I set each part of the response to content-type 'image/png'. This allows the React frontend to parse the response as `formData` and iterate over all the parts where the images are stored as base64 that can be used to render them as <img src="data:image/png;base64,{base64_string_of_the_image}">.
+#### Sending images from Flask to React
+Sending 1000 images from the database to the React frontend can be tricky especially if you want to render them instead of downloading them. In order to achieve that I created a `MultipartEncoder` response in Flask where each part is an image that is converted first to bytes using io.BytesIO() and then to a base64 string using base64.encodebytes(). I set each part of the response to content-type 'image/png'. This allows the React frontend to parse the response as `formData` and iterate over all the parts where the images are stored as base64 that can be used to render them as <img src="data:image/png;base64,{base64_string_of_the_image}">.
 
 ### Database Schema
 <img src="https://github.com/pkiourti/visualizing_nn_adversarial_attacks/blob/main/screenshots/db-schema.png">
