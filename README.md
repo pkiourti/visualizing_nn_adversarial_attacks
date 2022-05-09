@@ -73,6 +73,37 @@ cp visualizing_nn_adversarial_attacks/nn-app
 npm start
 ```
 
+### NOTES
+- Your model should be in an onnx format. Hence, the versions of pytorch or tensorflow that the model used to get trained don't matter. Onnx format is very useful because you pass both the architecture and the weights of the neural network in one file. I used onnx format to upload the model as one file, which then I `pickle` and store in the database. In order to load the model later from the database and can retrieve the inference session from the loaded model by doing the following:
+
+```
+import pickle
+import onnxrutime
+from pymongo import MongoClient
+
+client = MongoClient('localhost', 27017)
+db = client.models
+
+try:
+  model = db.models.find_one({"_id": ObjectId(model)})
+except:
+  raise ValueError('Model not found')
+
+onnx_model = pickle.loads(model['model'])
+ort_session = onnxruntime.InferenceSession(onnx_model.SerializeToString())
+```
+
+Then you can use this session to actually predict labels for `images` in the following way:
+```
+import numpy as np
+ort_inputs = {ort_session.get_inputs()[0].name: np.transpose(images, (0, 3, 1, 2)).astype('float32') / 255.}
+outputs = ort_session.run(None, ort_inputs)[0]
+
+labels = [l.argmax() for l in outputs]
+```
+
+Before all that, if you don't have a model in an onnx format you can take a look at an example udner convert_to_onnx.py that converts a pytorch model to onnx. Some models in onnx format are provided under `models/` 
+
 ### Database Schema
 <img src="https://github.com/pkiourti/visualizing_nn_adversarial_attacks/blob/main/screenshots/db-schema.png">
 
