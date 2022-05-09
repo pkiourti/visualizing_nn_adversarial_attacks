@@ -85,7 +85,7 @@ client = MongoClient('localhost', 27017)
 db = client.models
 
 try:
-  model = db.models.find_one({"_id": ObjectId(model)})
+  model = db.models.find_one({"_id": ObjectId(model_id)})
 except:
   raise ValueError('Model not found')
 
