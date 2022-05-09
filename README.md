@@ -48,7 +48,7 @@ sudo systemctl start mongod
 
 ### Prepare Database
 In this project we work with the following datasets (or benchmarks):
-- [CIFAR10](!https://www.cs.toronto.edu/~kriz/cifar.html)
+- [CIFAR10](https://www.cs.toronto.edu/~kriz/cifar.html)
 - [German Traffic Sign Recognition Benchmark (GTSRB)](https://benchmark.ini.rub.de/)
 - MNIST
 - Fashion MNIST
